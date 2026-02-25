@@ -6,7 +6,7 @@ import random
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-BASE_DIR = os.getcwd()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 QUESTION_BANK_DIR = os.path.join(BASE_DIR, "question_bank")
 RESULTS_FILE = os.path.join(BASE_DIR, "results.json")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
