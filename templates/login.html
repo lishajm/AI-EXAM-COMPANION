@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login - AI Exam Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(to bottom,#0b0014 0%,#14002a 45%,#1f003d 70%,#0a0018 100%);
+  color:white;
+  position:relative;
+}
+
+/* ===== Layout ===== */
+.main-wrapper{
+  width:90%;
+  max-width:1200px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:60px;
+}
+
+/* ===== Left Branding ===== */
+.branding{
+  flex:1;
+  animation:fadeInLeft 1.2s ease;
+}
+
+@keyframes fadeInLeft{
+  from{opacity:0;transform:translateX(-40px);}
+  to{opacity:1;transform:translateX(0);}
+}
+
+.branding h1{
+  font-size:3.8rem;
+  font-weight:800;
+  background:linear-gradient(90deg,#c084fc,#a855f7,#7c3aed,#c084fc);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gradientMove 6s linear infinite;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+.typing{
+  margin-top:20px;
+  font-size:1.2rem;
+  color:#d8b4fe;
+  min-height:30px;
+}
+
+.features{
+  margin-top:30px;
+}
+
+.feature{
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#e9d5ff;
+  font-size:0.95rem;
+}
+
+.feature span{
+  font-size:1.2rem;
+  filter:drop-shadow(0 0 8px #a855f7);
+}
+
+/* ===== Background Effects ===== */
+.horizon{
+  position:fixed;
+  bottom:190px;
+  width:100%;
+  height:320px;
+  background:radial-gradient(ellipse at 50% 100%, rgba(168,85,247,0.35) 10%, transparent 65%);
+  filter:blur(48px);
+  z-index:-4;
+}
+
+.mountains-container{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:300px;
+  z-index:-3;
+}
+.mountain-layer{
+  position:absolute;
+  bottom:0;
+  width:120%;
+  height:300px;
+  background:#0a0014;
+}
+.layer2{background:#120022;}
+.layer3{background:#080010;}
+
+#particles{position:fixed;inset:0;z-index:-2;}
+.particle{
+  position:absolute;
+  width:4px;height:4px;
+  background:#c084fc;
+  border-radius:50%;
+  opacity:0.6;
+  animation:moveParticle linear infinite;
+}
+@keyframes moveParticle{
+  from{transform:translateY(110vh);}
+  to{transform:translateY(-20vh);}
+}
+
+/* ===== Login Card ===== */
+.container{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  animation:fadeInRight 1.2s ease;
+}
+
+@keyframes fadeInRight{
+  from{opacity:0;transform:translateX(40px);}
+  to{opacity:1;transform:translateX(0);}
+}
+
+.card{
+  width:100%;
+  max-width:400px;
+  background:rgba(25,0,45,0.9);
+  backdrop-filter:blur(20px);
+  border-radius:28px;
+  border:1px solid rgba(168,85,247,0.35);
+  padding:48px 38px 40px;
+  box-shadow:0 25px 70px rgba(168,85,247,0.35);
+  transition:transform .2s ease;
+}
+.card:hover{transform:translateY(-6px);}
+
+.robot-logo{
+  text-align:center;
+  font-size:4.5rem;
+  margin-bottom:12px;
+  animation:pulse 2s ease infinite;
+  filter:drop-shadow(0 0 15px #a855f7);
+}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+
+h2{text-align:center;font-size:2.1rem;margin-bottom:6px;}
+.subtitle{text-align:center;color:#c084fc;margin-bottom:32px;}
+
+input{
+  width:100%;
+  padding:16px 20px;
+  margin-bottom:18px;
+  border:none;
+  border-radius:16px;
+  background:rgba(255,255,255,0.08);
+  color:white;
+}
+input:focus{
+  outline:none;
+  box-shadow:0 0 0 3px rgba(168,85,247,0.4);
+}
+
+.password-wrapper{position:relative;}
+.eye{
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(90deg,#a855f7,#7c3aed);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+}
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 15px 40px rgba(168,85,247,0.5);
+}
+
+.links{text-align:center;margin-top:24px;}
+.links a{color:#c084fc;text-decoration:none;}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .main-wrapper{
+    flex-direction:column;
+    text-align:center;
+  }
+  .branding h1{font-size:2.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="horizon"></div>
+
+<div class="mountains-container">
+  <div class="mountain-layer layer1"></div>
+  <div class="mountain-layer layer2"></div>
+  <div class="mountain-layer layer3"></div>
+</div>
+
+<div id="particles"></div>
+
+<div class="main-wrapper">
+
+  <!-- LEFT SIDE -->
+  <div class="branding">
+    <h1>AI Exam Companion</h1>
+    <div class="typing" id="typing"></div>
+
+    <div class="features">
+      <div class="feature"><span>⚡</span> Smart AI-Powered Practice</div>
+      <div class="feature"><span>📊</span> Performance Analytics</div>
+      <div class="feature"><span>🎯</span> Personalized Exam Strategy</div>
+      <div class="feature"><span>🚀</span> Faster Learning Results</div>
+    </div>
+  </div>
+
+  <!-- RIGHT LOGIN -->
+  <div class="container">
+    <div class="card">
+
+      <div class="robot-logo">🤖</div>
+
+      <h2>Login</h2>
+      <div class="subtitle">Welcome Back</div>
+
+      <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Email" required>
+
+        <div class="password-wrapper">
+          <input type="password" id="loginPass" name="password" placeholder="Password" required>
+          <span class="eye" onclick="togglePass('loginPass')">👁</span>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <div class="links">
+        Don’t have an account? <a href="/register">Register</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePass(id){
+  const i=document.getElementById(id);
+  i.type=i.type==="password"?"text":"password";
+}
+
+/* Particles */
+const container=document.getElementById("particles");
+for(let i=0;i<50;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=(8+Math.random()*9)+"s";
+  container.appendChild(p);
+}
+
+/* Typing Effect */
+const text = "Your intelligent AI partner for smarter exam preparation.";
+let i=0;
+function typeWriter(){
+  if(i<text.length){
+    document.getElementById("typing").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typeWriter,40);
+  }
+}
+typeWriter();
+</script>
+
+</body>
+</html>

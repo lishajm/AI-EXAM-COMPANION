@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Exam Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Outfit',sans-serif;
+    background:#05030d;
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    position:relative;
+}
+
+/* BACKGROUND */
+body::before{
+    content:"";
+    position:absolute;
+    width:220%;
+    height:220%;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(160,0,255,.35), transparent 45%),
+      radial-gradient(circle at 80% 80%, rgba(80,0,255,.25), transparent 50%);
+    animation:bgMove 18s ease-in-out infinite alternate;
+    z-index:-2;
+}
+@keyframes bgMove{
+    from{transform:translate(0,0);}
+    to{transform:translate(-80px,-60px);}
+}
+
+/* CONTAINER */
+.container{
+    width:95%;
+    max-width:1200px;
+    height:88vh;
+    display:grid;
+    grid-template-columns:220px 1fr;
+    border-radius:18px;
+    overflow:hidden;
+    background:rgba(7,7,15,.92);
+    border:1px solid rgba(170,0,255,.25);
+    box-shadow:0 0 50px rgba(120,0,255,.25);
+}
+
+/* SIDEBAR */
+.sidebar{
+    background:linear-gradient(180deg,#090514,#06030d);
+    border-right:1px solid rgba(170,0,255,.25);
+    padding:16px 10px;
+}
+.nav{display:flex;flex-direction:column;gap:8px;}
+.nav a{
+    text-decoration:none;
+    color:#c8b8ff;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:.85rem;
+    transition:.3s;
+}
+.nav a.active{
+    background:linear-gradient(90deg,rgba(180,0,255,.45),rgba(80,0,255,.2));
+    color:white;
+}
+.nav a:hover{background:rgba(255,255,255,.05);}
+
+/* MAIN */
+.main{
+    padding:22px 24px;
+    overflow-y:auto;
+}
+
+/* HERO */
+.hero h2{
+    font-size:2rem;
+    text-shadow:0 0 14px rgba(170,0,255,.7);
+}
+.hero p{margin-top:4px;color:#b8a9df;}
+.live-time{margin-top:8px;color:#cdbfff;font-size:.85rem;}
+.timer{margin-top:6px;color:#ffd86a;font-size:.85rem;}
+
+/* PANEL */
+.panel{
+    margin-top:14px;
+    padding:14px;
+    border-radius:12px;
+    background:linear-gradient(180deg,#190e2d,#0c0819);
+    border:1px solid rgba(170,0,255,.25);
+}
+
+.quote{color:#f0b6ff;font-style:italic;transition:.5s;}
+#streak{color:#ffd86a;font-weight:600;}
+
+/* GRID */
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:12px;
+    margin-top:14px;
+}
+
+.card{
+    padding:14px;
+    border-radius:12px;
+    background:#12071f;
+    border:1px solid rgba(170,0,255,.25);
+    transition:.3s;
+}
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 14px rgba(170,0,255,.35);
+}
+.card h3{
+    margin-bottom:8px;
+    color:#e6d8ff;
+    font-size:1rem;
+}
+.card p{
+    font-size:.85rem;
+    color:#c9bde8;
+    line-height:1.5;
+}
+
+/* GOALS */
+.goal-item{margin:6px 0;}
+.goal-item input{margin-right:6px;}
+
+/* BADGES */
+.badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+.badge{
+    padding:6px 10px;
+    border-radius:8px;
+    background:rgba(180,0,255,.25);
+    font-size:.8rem;
+}
+
+@media(max-width:900px){
+    .container{grid-template-columns:1fr;height:auto;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="nav">
+        <a class="active" href="#">🏠 Dashboard</a>
+        <a href="/mocktest">⚔ Mock Test</a>
+       
+        <a href="/performance">📊 Analytics</a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="hero">
+        <h2>AI EXAM COMPANION</h2>
+        <p>Train Smart. Stay Disciplined. Achieve Rank.</p>
+        <div class="live-time" id="liveTime"></div>
+        <div class="timer" id="studyTimer">Study Session: 00:00:00</div>
+    </div>
+
+    <div class="panel">
+        <h3>Daily Motivation</h3>
+        <div class="quote" id="quote"></div>
+    </div>
+
+    <div class="panel">
+        <h3>🔥 Study Streak</h3>
+        <div id="streak">Today: 5 Days Consistency</div>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="card">
+            <h3>📊 Today’s Study Overview</h3>
+            <p>
+            Study Time: <span id="studyTime">0</span> mins<br>
+            Questions Practiced: <span id="questions">0</span><br>
+            Accuracy: <span id="accuracy">0</span>%<br>
+            Rank Trend: ↑ Improving
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>🧠 AI Insights</h3>
+            <p id="aiInsight"></p>
+        </div>
+
+        <div class="card">
+            <h3>🎯 Daily Goals</h3>
+            <div class="goal-item"><input type="checkbox" class="goal"> Complete 2 mock tests</div>
+            <div class="goal-item"><input type="checkbox" class="goal"> Revise Java Collections</div>
+            <div class="goal-item"><input type="checkbox" class="goal"> 1 Hour Revision Session</div>
+        </div>
+
+        <div class="card">
+            <h3>🏆 Achievements</h3>
+            <div class="badges">
+                <div class="badge">🔥 5 Day Streak</div>
+                <div class="badge">⚡ Accuracy 75%+</div>
+                <div class="badge">🎯 First Mock Completed</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⭐ XP Level</h3>
+            <p>Level 5 Learner<br>XP: 340 / 500</p>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script>
+/* LIVE TIME */
+setInterval(()=>{
+    document.getElementById("liveTime").textContent=
+        new Date().toLocaleTimeString();
+},1000);
+
+/* STUDY TIMER */
+let sec=0;
+setInterval(()=>{
+    sec++;
+    let h=String(Math.floor(sec/3600)).padStart(2,"0");
+    let m=String(Math.floor((sec%3600)/60)).padStart(2,"0");
+    let s=String(sec%60).padStart(2,"0");
+    document.getElementById("studyTimer").textContent =
+      "Study Session: "+h+":"+m+":"+s;
+},1000);
+
+/* QUOTES */
+const quotes=[
+"Your rank is built by daily discipline.",
+"Consistency beats motivation.",
+"Every mock test makes you stronger.",
+"Focus now. Celebrate later."
+];
+let qi=0;
+setInterval(()=>{
+    const q=document.getElementById("quote");
+    q.style.opacity=0;
+    setTimeout(()=>{
+        q.textContent=quotes[qi];
+        q.style.opacity=1;
+        qi=(qi+1)%quotes.length;
+    },300);
+},3000);
+document.getElementById("quote").textContent=quotes[0];
+
+/* AI TYPING EFFECT */
+const insightText =
+"AI Suggestion: Focus more on Networking today. Your last mock test shows lower accuracy in this topic.";
+let idx=0;
+function typeAI(){
+    if(idx < insightText.length){
+        document.getElementById("aiInsight").textContent += insightText.charAt(idx);
+        idx++;
+        setTimeout(typeAI,30);
+    }
+}
+typeAI();
+
+/* ANIMATED COUNTERS */
+function animate(id,target,speed){
+    let c=0;
+    let interval=setInterval(()=>{
+        c++;
+        document.getElementById(id).textContent=c;
+        if(c>=target) clearInterval(interval);
+    },speed);
+}
+animate("studyTime",40,40);
+animate("questions",35,45);
+animate("accuracy",78,35);
+
+/* SAVE GOALS */
+document.querySelectorAll(".goal").forEach((box,i)=>{
+    box.checked = localStorage.getItem("goal"+i)==="true";
+    box.onchange=()=>{
+        localStorage.setItem("goal"+i,box.checked);
+    }
+});
+</script>
+
+</body>
+</html>

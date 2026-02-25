@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock Test - Stages</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Outfit',sans-serif;
+    min-height:100vh;
+    background:#050505;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    overflow:hidden;
+    position:relative;
+    padding-top:60px;
+}
+
+/* Background Video */
+#bg-video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-5;
+    filter:brightness(0.3) blur(1px);
+}
+
+/* 💜 Soft Glow Background Orbs */
+.glow{
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle, rgba(180,0,255,0.25), transparent 70%);
+    filter:blur(90px);
+    z-index:-4;
+}
+.glow1{ top:-150px; left:-150px; }
+.glow2{ bottom:-150px; right:-150px; }
+
+/* Back Arrow */
+.back-arrow{
+    position:fixed;
+    top:20px;
+    left:20px;
+    font-size:1.8rem;
+    color:#d000ff;
+    cursor:pointer;
+    z-index:10;
+    transition:0.3s ease;
+}
+
+.back-arrow:hover{
+    transform:scale(1.2);
+    color:#fff;
+}
+
+/* Header */
+h1{
+    text-align:center;
+    font-size:2.4rem;
+    font-weight:700;
+    background:linear-gradient(90deg,#8a00ff,#d000ff,#ffffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:10px;
+}
+
+.caption{
+    text-align:center;
+    color:#bbb;
+    font-size:1rem;
+    margin-bottom:30px;
+}
+
+/* 💎 Glass Container with entry animation */
+.container{
+    width:90%;
+    max-width:500px;
+    padding:40px 30px;
+    border-radius:30px;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(170,0,255,0.5);
+    box-shadow:
+        0 0 60px rgba(170,0,255,0.4),
+        inset 0 0 40px rgba(255,255,255,0.05);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    max-height:70vh;
+    overflow-y:auto;
+    transform:translateY(-50px);
+    opacity:0;
+    animation:fadeInUp 0.8s forwards;
+}
+
+/* Light Sweep Animation */
+.container::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation:shine 6s infinite;
+    will-change: left;
+    pointer-events:none;
+}
+
+@keyframes shine{
+    0%{ left:-100%; }
+    100%{ left:150%; }
+}
+
+@keyframes fadeInUp{
+    0%{ opacity:0; transform:translateY(-50px); }
+    100%{ opacity:1; transform:translateY(0); }
+}
+
+/* Stage Boxes */
+.stage-box{
+    width:100%;
+    max-width:400px;
+    padding:18px;
+    background:rgba(0,0,0,0.6);
+    border-radius:15px;
+    border:1px solid rgba(170,0,255,0.3);
+    cursor:pointer;
+    font-weight:600;
+    text-align:center;
+    transition:0.4s ease, transform 0.3s ease;
+}
+
+.stage-box:hover{
+    background:linear-gradient(90deg,#8a00ff,#d000ff);
+    color:#fff;
+    box-shadow:0 0 25px rgba(170,0,255,0.8);
+    transform:scale(1.05) translateX(5px);
+}
+
+/* Scrollbar */
+.container::-webkit-scrollbar{
+    width:6px;
+}
+.container::-webkit-scrollbar-thumb{
+    background:#a100ff;
+    border-radius:10px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+    h1{
+        font-size:1.8rem;
+    }
+    .caption{
+        font-size:0.9rem;
+    }
+    .back-arrow{
+        font-size:1.5rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Back Arrow -->
+<div class="back-arrow" onclick="history.back()">←</div>
+
+<!-- Background video -->
+<video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='grain.mp4') }}" type="video/mp4">
+</video>
+
+<!-- Purple Glow Orbs -->
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<h1>MOCK TEST STAGES</h1>
+<div class="caption">Pick your stage to challenge yourself and excel</div>
+
+<div class="container">
+    <div class="stage-box" onclick="location.href='/mocktest/stage/1'">🚀 Stage 1</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/2'">🚀 Stage 2</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/3'">🚀 Stage 3</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/4'">🚀 Stage 4</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/5'">🚀 Stage 5</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/6'">🚀 Stage 6</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/7'">🚀 Stage 7</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/8'">🚀 Stage 8</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/9'">🚀 Stage 9</div>
+    <div class="stage-box" onclick="location.href='/mocktest/stage/10'">🚀 Stage 10</div>
+</div>
+
+</body>
+</html>

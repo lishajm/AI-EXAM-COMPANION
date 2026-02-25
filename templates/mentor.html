@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='images/mentor.css') }}">
+  <style>
+    /* === BACK ARROW === */
+    .back-arrow{
+      position:fixed;
+      top:20px;
+      left:20px;
+      font-size:1.8rem;
+      color:#d000ff;
+      cursor:pointer;
+      z-index:30;
+      transition:0.3s ease;
+    }
+    .back-arrow:hover{
+      transform:scale(1.2);
+      color:#fff;
+    }
+
+    /* === LUMORA DESIGN STYLE === */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a051f;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #fff;
+    }
+
+    /* PARTICLE BACKGROUND */
+    #particle-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    /* Glowing Orb */
+    .orb {
+      position: fixed;
+      top: 28%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 310px;
+      height: 310px;
+      background: radial-gradient(circle at 35% 35%, #a0f8ff, #6e40ff 45%, #2d0b7a);
+      border-radius: 50%;
+      box-shadow: 
+        0 0 80px 30px #00e0ff,
+        0 0 160px 60px #b366ff,
+        0 0 280px 90px #4c1d95;
+      z-index: -2;
+      pointer-events: none;
+      animation: orb-pulse 10s ease-in-out infinite;
+    }
+
+    @keyframes orb-pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.06); }
+    }
+
+    /* Slogan */
+    .slogan {
+      position: fixed;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+      text-align: center;
+      z-index: 1;
+      text-shadow: 0 0 40px #d000ff;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Chat Container */
+    .chat-container {
+      position: relative;
+      z-index: 5;
+      width: 92%;
+      max-width: 920px;
+      margin: 100px auto 40px;
+      height: calc(100vh - 180px);
+      background: rgba(12, 6, 38, 0.82);
+      border-radius: 32px;
+      border: 1.5px solid rgba(208, 0, 255, 0.25);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7),
+                  inset 0 0 60px rgba(208, 0, 255, 0.1);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+
+    .chat-header {
+      padding: 26px 32px;
+      background: linear-gradient(to bottom, rgba(208,0,255,0.12), transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .chat-header h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      background: linear-gradient(90deg, #ffffff, #d000ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px #d000ff;
+    }
+
+    .status-dot {
+      position: absolute;
+      right: 34px;
+      top: 32px;
+      width: 11px;
+      height: 11px;
+      background: #39ff8a;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #39ff8a;
+    }
+
+    .chat-box {
+      padding: 30px 32px;
+      height: calc(100% - 220px);
+      overflow-y: auto;
+      background: transparent;
+    }
+
+    .chat-input-area {
+      padding: 20px 32px 32px;
+      background: rgba(0,0,0,0.45);
+      border-top: 1px solid rgba(208,0,255,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #user-input {
+      flex: 1;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(208,0,255,0.35);
+      border-radius: 9999px;
+      padding: 18px 26px;
+      font-size: 1.15rem;
+      color: #fff;
+      box-shadow: inset 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    #user-input:focus {
+      outline: none;
+      border-color: #d000ff;
+      box-shadow: 0 0 0 5px rgba(208,0,255,0.3);
+    }
+
+    #user-input::placeholder {
+      color: #999;
+    }
+
+    #send-btn {
+      width: 54px;
+      height: 54px;
+      background: linear-gradient(135deg, #d000ff, #6b00ff);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px #d000ff;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    #send-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 45px #d000ff;
+    }
+
+    .chat-footer {
+      text-align: center;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back Arrow -->
+  <div class="back-arrow" onclick="history.back()">←</div>
+
+  <!-- Particle Background -->
+  <canvas id="particle-bg"></canvas>
+
+  <!-- Glowing Orb -->
+  <div class="orb"></div>
+
+  <!-- Slogan -->
+  <div class="slogan">Wellness, Powered by AI</div>
+
+  <div class="chat-container">
+    <!-- Header -->
+    <header class="chat-header">
+      <h2>AI Chatbot</h2>
+      <span class="status-dot"></span>
+    </header>
+
+    <!-- Chat messages -->
+    <div id="chat-box" class="chat-box"></div>
+
+    <!-- Input area -->
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <input id="user-input" type="text" placeholder="How about your experiences and background..." autocomplete="off">
+        <button id="send-btn">➤</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="chat-footer">
+      Built by Rahul & Team
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='images/mentor.js') }}"></script>
+
+  <!-- PARTICLE JS -->
+  <script>
+    const canvas = document.getElementById('particle-bg');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const colors = ['#a0f8ff', '#6e40ff', '#d000ff', '#ffffff'];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      const count = Math.floor(window.innerWidth / 5);
+      for (let i = 0; i < count; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    initParticles();
+    window.addEventListener('resize', initParticles);
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>

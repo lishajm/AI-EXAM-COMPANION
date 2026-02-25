@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock Test Result</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:#050505;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+
+/* 🔮 Moving Grid Background */
+body::before{
+  content:"";
+  position:absolute;
+  width:150%;
+  height:150%;
+  background-image:
+    linear-gradient(rgba(170,0,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(170,0,255,0.06) 1px, transparent 1px);
+  background-size:60px 60px;
+  animation:moveGrid 30s linear infinite;
+  z-index:-4;
+}
+
+@keyframes moveGrid{
+  from{ transform:translate(0,0); }
+  to{ transform:translate(-60px,-60px); }
+}
+
+/* 💜 Glow Orbs */
+.glow{
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle, rgba(180,0,255,0.25), transparent 70%);
+  filter:blur(100px);
+  z-index:-3;
+}
+
+.glow1{ top:-150px; left:-150px; }
+.glow2{ bottom:-150px; right:-150px; }
+
+/* 🔙 Back Arrow */
+.back-arrow{
+  position:fixed;
+  top:25px;
+  left:25px;
+  font-size:2rem;
+  color:#c77dff;
+  cursor:pointer;
+  z-index:10;
+  transition:0.3s;
+  text-shadow:0 0 15px rgba(170,0,255,0.9);
+}
+
+.back-arrow:hover{
+  transform:scale(1.2);
+  color:#ffffff;
+}
+
+/* 💎 Result Glass Card */
+.result-card{
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(20px);
+  border-radius:30px;
+  border:1px solid rgba(170,0,255,0.5);
+  box-shadow:
+    0 0 60px rgba(170,0,255,0.5),
+    inset 0 0 40px rgba(255,255,255,0.05);
+  padding:50px 40px;
+  width:90%;
+  max-width:500px;
+  text-align:center;
+  animation:fadeUp 0.7s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Shine Effect */
+.result-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:40%;
+  height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation:shine 6s infinite;
+}
+
+@keyframes shine{
+  0%{ left:-100%; }
+  100%{ left:150%; }
+}
+
+/* Score */
+.score{
+  font-size:3.5rem;
+  font-weight:700;
+  margin-bottom:10px;
+  background:linear-gradient(90deg,#8a00ff,#d000ff,#ffffff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Percentage */
+.percent{
+  font-size:1.2rem;
+  color:#ccc;
+  margin-bottom:25px;
+  letter-spacing:1px;
+}
+
+/* Stars */
+.stars{
+  font-size:2rem;
+  margin-bottom:20px;
+  text-shadow:0 0 20px rgba(170,0,255,0.9);
+}
+
+/* Status */
+.status{
+  font-size:1.3rem;
+  margin-bottom:18px;
+  font-weight:600;
+  color:#ffffff;
+}
+
+/* Motivation */
+.motivation{
+  font-size:1rem;
+  color:#ddd;
+  line-height:1.6;
+  opacity:0.9;
+}
+
+/* Animation */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media(max-width:600px){
+  .result-card{
+    padding:35px 25px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<!-- Back Button -->
+<div class="back-arrow" onclick="history.back()">←</div>
+
+<div class="result-card">
+  <div class="score" id="scoreText"></div>
+  <div class="percent" id="percentText"></div>
+  <div class="stars" id="starRating"></div>
+  <div class="status" id="statusText"></div>
+  <div class="motivation" id="motivationText"></div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const scored = parseInt(params.get("score")) || 0;
+const total = 25;
+const percentage = Math.round((scored / total) * 100);
+
+document.getElementById("scoreText").innerText = `${scored} / ${total}`;
+document.getElementById("percentText").innerText = `${percentage}% Performance`;
+
+let stars = "";
+let status = "";
+let motivation = "";
+
+if (percentage >= 80) {
+  stars = "⭐⭐⭐⭐⭐";
+  status = "Excellent Performance 🎯";
+  motivation = "Outstanding work! Keep this momentum going.";
+} else if (percentage >= 65) {
+  stars = "⭐⭐⭐⭐";
+  status = "Very Good 👍";
+  motivation = "Great job! A little more practice will make you perfect.";
+} else if (percentage >= 50) {
+  stars = "⭐⭐⭐";
+  status = "Good, Can Improve 💪";
+  motivation = "You’re on the right path. Keep practicing consistently.";
+} else if (percentage >= 35) {
+  stars = "⭐⭐";
+  status = "Needs More Practice 📘";
+  motivation = "Don’t worry. Every mistake is a step closer to success.";
+} else {
+  stars = "⭐";
+  status = "Keep Going 🚀";
+  motivation = "Success is built on effort, not perfection. Try again!";
+}
+
+document.getElementById("starRating").innerText = stars;
+document.getElementById("statusText").innerText = status;
+document.getElementById("motivationText").innerText = motivation;
+</script>
+
+</body>
+</html>

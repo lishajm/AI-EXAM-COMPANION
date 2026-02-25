@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PERFORMANCE DASHBOARD</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Outfit',sans-serif;
+    min-height:100vh;
+    background:#050505;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Background Video */
+#bg-video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-5;
+    filter:brightness(0.25) blur(1px);
+}
+
+/* Glow Effects */
+.glow{
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle, rgba(180,0,255,0.25), transparent 70%);
+    filter:blur(90px);
+    z-index:-4;
+}
+.glow1{ top:-150px; left:-150px; }
+.glow2{ bottom:-150px; right:-150px; }
+
+/* Back Arrow */
+.back-arrow{
+    position:fixed;
+    top:25px;
+    left:30px;
+    font-size:1.8rem;
+    color:#d000ff;
+    cursor:pointer;
+    transition:0.3s ease;
+    z-index:10;
+}
+.back-arrow:hover{
+    transform:scale(1.2);
+    color:#fff;
+}
+
+/* Container with fade-in animation */
+.container{
+    width:95%;
+    max-width:1100px;
+    padding:50px;
+    border-radius:30px;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(170,0,255,0.5);
+    box-shadow:0 0 60px rgba(170,0,255,0.4),
+               inset 0 0 40px rgba(255,255,255,0.05);
+    position:relative;
+    opacity:0;
+    transform:translateY(-50px);
+    animation:fadeInUp 1s forwards;
+}
+
+@keyframes fadeInUp{
+    0%{opacity:0; transform:translateY(-50px);}
+    100%{opacity:1; transform:translateY(0);}
+}
+
+/* Title */
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:2.5rem;
+    background:linear-gradient(90deg,#8a00ff,#d000ff,#ffffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    letter-spacing:1px;
+}
+
+/* Summary Boxes */
+.summary-boxes{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    gap:25px;
+    margin-bottom:40px;
+}
+.summary-card{
+    flex:1 1 250px;
+    background:linear-gradient(145deg, rgba(0,0,0,0.85), rgba(40,0,60,0.9));
+    border:1px solid rgba(170,0,255,0.4);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    transition:0.4s ease;
+    position:relative;
+    overflow:hidden;
+}
+.summary-card:hover{
+    transform:translateY(-5px) scale(1.03);
+    box-shadow:0 0 30px rgba(170,0,255,0.6);
+}
+.summary-card h3{
+    font-size:1rem;
+    color:#bbb;
+    margin-bottom:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+.summary-card p{
+    font-size:2.2rem;
+    color:#c77dff;
+    font-weight:700;
+}
+
+/* Advanced Feature Cards */
+.features{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    gap:25px;
+    margin-bottom:40px;
+}
+.feature-card{
+    flex:1 1 300px;
+    background:linear-gradient(145deg, rgba(0,0,0,0.85), rgba(50,0,70,0.9));
+    border:1px solid rgba(170,0,255,0.4);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    transition:0.4s ease;
+    position:relative;
+}
+.feature-card:hover{
+    transform:translateY(-5px) scale(1.03);
+    box-shadow:0 0 30px rgba(170,0,255,0.6);
+}
+.feature-card h3{
+    font-size:1.2rem;
+    color:#d000ff;
+    margin-bottom:10px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+}
+.feature-card p{
+    font-size:1.4rem;
+    color:#fff;
+    font-weight:600;
+}
+
+/* Motivational Note Section */
+.note{
+    margin-top:40px;
+    background:rgba(255,255,255,0.05);
+    border-left:5px solid #d000ff;
+    padding:20px;
+    border-radius:10px;
+    font-size:1.1rem;
+    color:#fff;
+    animation:fadeInUp 1.5s forwards;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .summary-boxes, .features{flex-direction:column;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Back Arrow -->
+<div class="back-arrow" onclick="history.back()">←</div>
+
+<!-- Background video -->
+<video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='grain.mp4') }}" type="video/mp4">
+</video>
+
+<!-- Glow Orbs -->
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<div class="container">
+
+<h1>PERFORMANCE DASHBOARD</h1>
+
+<!-- Summary Boxes -->
+<div class="summary-boxes">
+    <div class="summary-card">
+        <h3>Total Tests Attempted</h3>
+        <p id="total"></p>
+    </div>
+    <div class="summary-card">
+        <h3>Overall Accuracy</h3>
+        <p id="accuracy"></p>
+    </div>
+    <div class="summary-card">
+        <h3>Passed Tests</h3>
+        <p id="passed"></p>
+    </div>
+</div>
+
+<!-- Advanced Features -->
+<div class="features">
+    <div class="feature-card">
+        <h3>Consistency Tracker</h3>
+        <p id="streak">0 attempts in streak</p>
+    </div>
+    <div class="feature-card">
+        <h3>Improvement Rate</h3>
+        <p id="improvement"></p>
+    </div>
+    <div class="feature-card">
+        <h3>Focus Recommendation</h3>
+        <p id="recommendation"></p>
+    </div>
+</div>
+
+<!-- Motivational Note -->
+<div class="note" id="motivationNote">
+    Keep learning, stay consistent, and aim for continuous improvement! 💪
+</div>
+
+</div>
+
+<script>
+const data = {{ data | tojson }};
+
+// Core Stats
+const totalTests = data.total_attempts || 0;
+const overallAccuracy = data.overall_performance?.overall_accuracy || 0;
+
+// Passed tests (score >=50)
+let passedTests = 0;
+if(data.attempt_history?.length){
+    passedTests = data.attempt_history.filter(a => a.score >= 50).length;
+}
+
+// Populate Summary Boxes
+document.getElementById("total").innerText = totalTests;
+document.getElementById("accuracy").innerText = overallAccuracy + "%";
+document.getElementById("passed").innerText = passedTests;
+
+// Advanced Features
+// Consistency Tracker always 0
+document.getElementById("streak").innerText = "0 attempts in streak";
+
+// Improvement
+let improvement = 0;
+if(data.attempt_history?.length > 1){
+    const first = data.attempt_history[0].score;
+    const last = data.attempt_history[data.attempt_history.length-1].score;
+    improvement = last - first;
+}
+
+// Recommendation
+let recommendation = "Review fundamentals regularly.";
+let weakSubjects = [];
+for(let stage in data.stage_summary){
+    weakSubjects = weakSubjects.concat(data.stage_summary[stage].weak_topics);
+}
+if(weakSubjects.length){
+    recommendation = "Focus on: " + weakSubjects[0];
+}
+
+document.getElementById("improvement").innerText = improvement >= 0 ? "+"+improvement+"% improvement" : improvement+"% decline";
+document.getElementById("recommendation").innerText = recommendation;
+
+// Motivational Notes based on improvement
+const noteEl = document.getElementById("motivationNote");
+if(improvement > 10){
+    noteEl.innerText = "Fantastic progress! You're improving rapidly 🚀";
+}else if(improvement > 0){
+    noteEl.innerText = "Steady growth — keep building on this 💪";
+}else if(improvement === 0){
+    noteEl.innerText = "You're holding steady — try to push a bit further 📈";
+}else{
+    noteEl.innerText = "Don't worry about the decline — learn from mistakes and bounce back 🔄";
+}
+</script>
+
+</body>
+</html>

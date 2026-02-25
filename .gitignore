@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.exe
+*.mp4
+.env
+models/
